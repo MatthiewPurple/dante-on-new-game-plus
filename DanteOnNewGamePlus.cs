@@ -4,7 +4,7 @@ using Il2Cpp;
 using dante_on_new_game_plus;
 using Il2Cppnewdata_H;
 
-[assembly: MelonInfo(typeof(DanteOnNewGamePlus), "Dante/Raidou on New Game Plus", "1.0.0", "Matthiew Purple")]
+[assembly: MelonInfo(typeof(DanteOnNewGamePlus), "Dante/Raidou on New Game Plus [level 1]", "1.0.0", "Matthiew Purple")]
 [assembly: MelonGame("アトラス", "smt3hd")]
 
 namespace dante_on_new_game_plus;
