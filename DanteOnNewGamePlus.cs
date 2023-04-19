@@ -1,0 +1,77 @@
+﻿using MelonLoader;
+using HarmonyLib;
+using Il2Cpp;
+using dante_on_new_game_plus;
+using Il2Cppnewdata_H;
+
+[assembly: MelonInfo(typeof(DanteOnNewGamePlus), "Dante/Raidou on New Game Plus", "1.0.0", "Matthiew Purple")]
+[assembly: MelonGame("アトラス", "smt3hd")]
+
+namespace dante_on_new_game_plus;
+public class DanteOnNewGamePlus : MelonMod
+{
+    // When creating a NG+
+    [HarmonyPatch(typeof(dds3GlobalWork), nameof(dds3GlobalWork.NewGame2Pop))]
+    private class Patch
+    {
+        public static void Postfix()
+        {
+            // If Dante/Raidou not already in party
+            foreach (datUnitWork_t work in dds3GlobalWork.DDS3_GBWK.unitwork)
+            {
+                if (work.id == 192) return; // Does nothing
+            }
+
+            // If he's not in the party already, adds him
+            datCalc.datAddDevil(192, 0);
+
+            // Changes his stats to be those of a level 1 demon
+            foreach (datUnitWork_t work in dds3GlobalWork.DDS3_GBWK.unitwork)
+            {
+                if (work.id == 192)
+                {
+                    work.level = 1;
+                    work.exp = 0;
+
+                    work.param[0] = 8;
+                    work.param[2] = 6;
+                    work.param[3] = 6;
+                    work.param[4] = 8;
+                    work.param[5] = 3;
+
+                    work.hp = 42;
+                    work.maxhp = 42;
+                    work.mp = 21;
+                    work.maxmp = 21;
+                }
+            }
+        }
+    }
+
+    // Uses Demi-fiend exp curve for Dante/Raidou (until level 80)
+    [HarmonyPatch(typeof(rstCalcCore), nameof(rstCalcCore.cmbCalcLevelUpExp))]
+    private class Patch2
+    {
+        public static void Postfix(ref datUnitWork_t pStock, ref int Level, ref uint __result)
+        {
+            if (pStock.id == 192 && pStock.level < 80)
+            {
+                datUnitWork_t demifiend = dds3GlobalWork.DDS3_GBWK.unitwork[0];
+                __result = rstCalcCore.cmbCalcLevelUpExp(ref demifiend, Level);
+            }
+        }
+    }
+
+    // Displays Demi-fiend exp curve for Dante/Raidou (until level 80)
+    [HarmonyPatch(typeof(rstCalcCore), nameof(rstCalcCore.GetNextExpDisp))]
+    private class Patch3
+    {
+        public static void Postfix(ref datUnitWork_t pStock, ref uint now_exp, ref uint __result)
+        {
+            if (pStock.id == 192 && pStock.level < 80)
+            {
+                __result = rstCalcCore.GetNextExpDisp(dds3GlobalWork.DDS3_GBWK.unitwork[0], now_exp);
+            }
+        }
+    }
+}
