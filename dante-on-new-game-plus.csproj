@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>dante_on_new_game_plus</RootNamespace>
-    <AssemblyName>dante_on_new_game_plus</AssemblyName>
+    <RootNamespace>dante_on_new_game_plus_level_1</RootNamespace>
+    <AssemblyName>dante_on_new_game_plus_level_1</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
