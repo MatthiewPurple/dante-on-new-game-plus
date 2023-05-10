@@ -54,10 +54,17 @@ public class DanteOnNewGamePlus : MelonMod
     {
         public static void Postfix(ref datUnitWork_t pStock, ref int Level, ref uint __result)
         {
-            if (pStock.id == 192 && pStock.level < 80)
+            if (pStock.id == 192)
             {
                 datUnitWork_t demifiend = dds3GlobalWork.DDS3_GBWK.unitwork[0];
-                __result = rstCalcCore.cmbCalcLevelUpExp(ref demifiend, Level);
+                if (pStock.level < 80)
+                {
+                    __result = rstCalcCore.cmbCalcLevelUpExp(ref demifiend, Level);
+                }
+                else if (pStock.level == 80 && pStock.exp > 40000)
+                {
+                    pStock.exp -= rstCalcCore.cmbCalcLevelUpExp(ref demifiend, 80);
+                }
             }
         }
     }
@@ -68,9 +75,12 @@ public class DanteOnNewGamePlus : MelonMod
     {
         public static void Postfix(ref datUnitWork_t pStock, ref uint now_exp, ref uint __result)
         {
-            if (pStock.id == 192 && pStock.level < 80)
+            if (pStock.id == 192)
             {
-                __result = rstCalcCore.GetNextExpDisp(dds3GlobalWork.DDS3_GBWK.unitwork[0], now_exp);
+                if (pStock.level < 80)
+                {
+                    __result = rstCalcCore.GetNextExpDisp(dds3GlobalWork.DDS3_GBWK.unitwork[0], now_exp);
+                }
             }
         }
     }
